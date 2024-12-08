@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
 import { FC } from 'react';
+import Link from 'next/link';
 
 
 // Define the type for each item
@@ -203,7 +204,9 @@ const Page: FC = () => {
                             <p className="text-[20px] md:text-[36px] mb-6">{product.anker}</p>
                             <div className="bg-black h-[40px] w-[148px] text-center rounded-3xl float-start items-center">
                                 <button className="bg-black text-white rounded-3xl mt-2 h-[20px] w-[120px] text-sm md:text-basetransition duration-300">
-                                    Add To Cart
+                                    <Link href="/mens">
+                                    
+                                    Add To Cart</Link>
                                 </button>
                             </div>
                         </div>

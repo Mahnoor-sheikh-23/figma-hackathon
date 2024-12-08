@@ -18,48 +18,42 @@ const Products = () => {
             img: "/shoe-images/shoes-1.png",
             para: "Nike Air Max Pulse",
             anker: "Women's  Shoes",
-            stars: '/images/Five star.png',
             price : "₹ 13 995"
         },
         {
             id: 2,
             // button: "-35%",
             img: "/shoe-images/shoes-3.png",
-            para: "AK-900 Wierd Keyboard",
-            anker: "$960",
-            stars: '/images/Five star.png'
+            para: "Nike Court Vision Low",
+            anker: "₹ 15 895",
         },
         {
             id: 3,
             // button: "-30%",
             img: "/shoe-images/shoes-4.png",
-            para: "IPS LCD Gaming Monitor",
-            anker: "$320",
-            stars: '/images/Five star.png'
+            para: "Nike Air Force 1 PLT.AF.ORM",
+            anker: "₹ 18 872",
         },
         {
             id: 4,
             // button: "-25%",
             img: "/shoe-images/rainbow.png",
-            para: "S-Series Comfort Chair",
-            anker: "$375",
-            stars: '/images/Five star.png'
+            para: "Nike SB Zoom Janoski OG+",
+            anker: "₹ 19 980",
         },
         {
             id: 5,
             // button: "-75%",
             img: "/shoe-images/shoes-10.png",
-            para: "HAVIT HV-G92 Gamepad",
-            anker: "$120",
-            stars: '/images/Five star.png'
+            para: "Nike Air Force 1 '07",
+            anker: "₹ 15 230",
         },
         {
             id: 6,
             button: "-75%",
             img: "/shoe-images/orange.png",
             para: "HAVIT HV-G92 Gamepad",
-            anker: "$120",
-            stars: '/images/Five star.png'
+            anker: "₹ 13 432",
         },
     ]
 
