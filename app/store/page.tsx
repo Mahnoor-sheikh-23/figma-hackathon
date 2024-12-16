@@ -267,10 +267,10 @@ const page = () => {
                         </div>
                     </div>
                     <div className='w-full sm:w-[1092px]'>
-                        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+                        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 '>
                             {item.map((items) => (
-                                <div key={items.id} className='h-[533px] flex p-3 md:p-0  mt-10'>
-                                    <div className='w-full sm:w-[270px] h-[320px]'>
+                                <div key={items.id} className='h-[533px] flex p-3 md:p-0  '>
+                                    <div className='w-full sm:w-[270px] h-[320px] '>
                                         <div className='md:h-[348px] md:w-[348px]  bg-gray-100 flex items-center justify-center'>
                                             <Link href={`/store/${items.id}`}>
                                                 <Image alt='' src={items.img} className='object-cover' width={348} height={348} />

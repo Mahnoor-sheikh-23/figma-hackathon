@@ -9,33 +9,42 @@ const Essential = () => {
         <div>
             <div className="flex flex-col justify-center px-4 sm:px-8 lg:px-16">
                 {/* Heading Section */}
-                <div className=" mb-6">
-                    <p className="text-[20px] md:text-[23px] font-medium">The  Essentials</p>
+                <div className="mb-6">
+                    <p className="text-[20px] md:text-[23px] text-start font-medium">The Essentials</p>
                 </div>
 
                 {/* Image Section */}
-                <div className="flex md:flex-row flex-col justify-center gap-2 items-center">
-                    <Image
-                        src={mens }
-                        alt=""
-                        className="object-cover "
-                    />
-                    <Image
-                        src={womens }
-                        alt=""
-                        className="object-cover "
-                    />
-                    <Image
-                        src={kids }
-                        alt=""
-                        className="object-cover "
-                    />
-                </div>
+                <div className="flex flex-wrap justify-center gap-4 items-center">
+                    {/* Men's Image */}
+                    <div className="flex-1 min-w-[150px] max-w-[300px] lg:max-w-none lg:w-[300px]">
+                        <Image
+                            src={mens}
+                            alt="Men's Shoes"
+                            className="w-full h-auto lg:h-[500px] object-cover rounded-md"
+                        />
+                    </div>
 
-                
+                    {/* Women's Image */}
+                    <div className="flex-1 min-w-[150px] max-w-[300px] lg:max-w-none lg:w-[300px]">
+                        <Image
+                            src={womens}
+                            alt="Women's Shoes"
+                            className="w-full h-auto lg:h-[500px] object-cover rounded-md"
+                        />
+                    </div>
+
+                    {/* Kids' Image */}
+                    <div className="flex-1 min-w-[150px] max-w-[300px] lg:max-w-none lg:w-[300px]">
+                        <Image
+                            src={kids}
+                            alt="Kids' Shoes"
+                            className="w-full h-auto lg:h-[500px] object-cover rounded-md"
+                        />
+                    </div>
+                </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Essential
+export default Essential;

@@ -201,7 +201,7 @@ const CarouselPrevious = React.forwardRef<
       size={size}
       className={cn(
         "absolute top-0 z-10 h-8 w-8 rounded-full",
-        "left-[94%]",
+        "md:left-[94%] left-[90%] mobile:left-[70%]",
         "transform translate-y-[50%]",
         className
       )}
@@ -229,7 +229,7 @@ const CarouselNext = React.forwardRef<
       size={size}
       className={cn(
         "absolute top-0 z-10 h-8 w-8 rounded-full",
-        "right-0",
+        "md:right-24 right-9 mobile:right-32 ",
         "transform translate-y-[50%]",
         className
       )}

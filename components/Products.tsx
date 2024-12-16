@@ -68,22 +68,22 @@ const Products = () => {
                         <div className="text-[22px] whitespace-nowrap font-semibold">
                             Best Of Air Max
                         </div>
-                        <div className="flex gap-9   ">
+                        <div className="flex gap-9 ">
                             <CarouselPrevious className="bg-gray-300 p-2 rounded-full" />
                             <CarouselNext className="bg-gray-300 p-2 rounded-full" />
                         </div>
                     </div>
 
                     <CarouselContent>
-                        {items.map((items) => (
+                        {items.map((items) => ( 
                             <CarouselItem key={items.id} className='md:basis-1/4  lg:basis-[25%] flex-shrink-0 w-[300px] p-4'>
-                                <div className='w-[1308px] h-[350px] flex  mt-10 '>
-                                    <div className='w-[270px] h-[350px ]  '>
-                                        <div className='w-[270px] h-[250px] items-center justify-center bg-gray-100   flex '>
+                                <div className='md:w-[1308px] md:h-[350px] flex   mt-10 custom:gap-9  h-auto w-auto '>
+                                    <div className='w-[270px] h-[350px ] '>
+                                        <div className='md:w-[270px]  h-auto w-auto md:h-[250px] items-center justify-center bg-gray-100   flex '>
                                             <Image alt='' src={items.img} width={441} height={441} />
                                         </div>
                                         <div className='flex'>
-                                        <div className='w-[201px] h-[84px] leading-8'>
+                                        <div className='w-[201px]  h-[84px] leading-8'>
                                             <p className='mt-3 font-medium text-[15px]'>{items.para}</p>
                                             <Link className="text-[#757575]  font-medium text-[15px]" href='/'>{items.anker}</Link>
                                         </div>
