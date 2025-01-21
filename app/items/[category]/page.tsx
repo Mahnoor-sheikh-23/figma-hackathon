@@ -1,160 +1,53 @@
+"use client";
 import Navbar from '@/components/Navbar'
 import React from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Image from 'next/image';
-import frame from '../../public/shoe-images/frame.png';
-import down from '../../public/shoe-images/down.png';
-import upper from "../../public/shoe-images/uppper.png"
+import frame from '../../../public/shoe-images/frame.png';
+import down from '../../../public/shoe-images/down.png';
+import upper from "../../../public/shoe-images/uppper.png"
 import Footer from '@/components/Footer';
+import { useWishlist } from "@/components/wishlistContext";
 import Link from 'next/link';
+import love from "../../../public/shoe-images/love.png"
+import { urlFor } from '@/sanity/lib/image';
 type Item = {
-    id: number;
-    img: string;
-    para: string;
-    para2: string;
-    para3: string;
-    anker: string;
+    _id: string;
+    image: string;
+    productName: string;
+    price: number;
+    category: string;
+    status: string;
+    colors: string[]
 };
-const page = () => {
 
-    const item: Item[] = [
-        {
-            id: 1,
-            img: "/shoe-images/jordan-1.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 2,
-            img: "/shoe-images/shoes-3.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 3,
-            img: "/shoe-images/shoes-4.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 4,
-            img: "/shoe-images/shoes-5.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 5,
-            img: "/shoe-images/shoes-6.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 7,
-            img: "/shoe-images/night.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 8,
-            img: "/shoe-images/shoes-7.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 9,
-            img: "/shoe-images/t-shirt.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 10,
-            img: "/shoe-images/shoes-8.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 11,
-            img: "/shoe-images/shoes-9.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 12,
-            img: "/shoe-images/shoes-10.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 13,
-            img: "/shoe-images/black.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 14,
-            img: "/shoe-images/red-shoes.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 15,
-            img: "/shoe-images/orange.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-        {
-            id: 16,
-            img: "/shoe-images/rainbow.png",
-            para: "Nike Air Force 1 Mid '07",
-            para2: "Men's shoes",
-            para3: "1 Color",
-            anker: "MRP : ₹ 10 795.00",
-          
-        },
-    ];
+const ItemsPage = () => {
+    const searchParams = useSearchParams(); // Get the query parameters from the URL
+    const category = searchParams.get("category") || "all";
+    const [data, setData] = useState<Item[]>([])
+    const { addToWishlist } = useWishlist();
 
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                console.log("Fetching products for category:", category); // Log the category
+                const response = await fetch(`http://localhost:3000/api/products?category=${encodeURIComponent(category)}`);
+                console.log(response);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch products");
+                }
+                const responses = await response.json();
+                console.log("Fetched products data:", data);
+                setData(responses.data);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+
+        fetchProducts();
+    }, [category]);
     return (
         <div>
             <Navbar />
@@ -185,7 +78,7 @@ const page = () => {
                 </div>
                 <div className='flex  justify-between'>
                     <div className='w-[260px] h-[449px] overflow-y-auto overflow-x-hidden  md:flex md:flex-row hidden flex-col gap-10'>
-                        <div className='h-[2145px] w-[192px] flex flex-col m-8 gap-20'>
+                        <div className='h-[1000px] w-[192px] flex flex-col m-8 gap-20'>
                             <div>
                                 <ul className='space-y-5 font-medium text-sm'>
                                     <li>Shoes</li>
@@ -260,7 +153,6 @@ const page = () => {
                                             <input type="checkbox" name="option3" value="Option 3" />
                                             ₹ 2 501.00 - ₹ 7 500.00
                                         </label>
-
                                     </div>
                                 </div>
                             </div>
@@ -268,25 +160,30 @@ const page = () => {
                     </div>
                     <div className='w-full sm:w-[1092px]'>
                         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 '>
-                            {item.map((items) => (
-                                <div key={items.id} className='h-[533px] flex p-3 md:p-0  '>
+                            {data.map((items: Item) => (
+                                <div key={items._id} className='h-[533px] flex p-3 md:p-0  '>
                                     <div className='w-full sm:w-[270px] h-[320px] '>
                                         <div className='md:h-[348px] md:w-[348px]  bg-gray-100 flex items-center justify-center'>
-                                            <Link href={`/store/${items.id}`}>
-                                                <Image alt='' src={items.img} className='object-cover' width={348} height={348} />
+                                            <Link href={`/store/${items._id}`}>
+                                                <Image alt='' src={urlFor(items.image).url()} className='object-cover' width={348} height={348} />
                                             </Link>
                                         </div>
                                         <div className='flex justify-between'>
                                             <div className='w-[201px] h-[84px] '>
-                                                <p className='text-red-800'>Just In</p>
-                                                <p className='mt-2 font-medium text-[15px]'>{items.para}</p>
-                                                <p className=' font-normal text-[#757575] text-[15px]'>{items.para2}</p>
-                                                <p className=' font-normal text-[#757575] text-[15px]'>{items.para3}</p>
+                                                <p className='text-red-800 mt-9'>{items.status}</p>
+                                                <p className='mt-2 font-medium text-[15px]'>{items.productName}</p>
+                                                <p className=' font-normal text-[#757575] text-[15px]'>{items.category} </p>
+                                                <p className=' font-normal text-[#757575] text-[15px]'>  {items.colors && items.colors.length > 0
+                                                    ? items.colors.join(', ')
+                                                    : 'No Colors Available'} Color</p>
                                                 <Link className='text-black font-medium text-[15px]' href='/'>
-                                                    {items.anker}
-                                                </Link>  
+                                                    MRP : ₹ {items.price}
+                                                </Link>
+
+                                                <button className=' ml-6 mt-5' onClick={() => addToWishlist(items)}><Image alt="" src={love}>
+                                                </Image></button>
                                             </div>
-                                           
+
                                         </div>
                                     </div>
                                 </div>
@@ -300,4 +197,4 @@ const page = () => {
     )
 }
 
-export default page;
+export default ItemsPage;

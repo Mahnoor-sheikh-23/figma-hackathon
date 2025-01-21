@@ -15,11 +15,14 @@ const AfterProductc = () => {
 
             {/* Image Section */}
             <div className="flex justify-center items-center">
+                <Link href={"/items/category?category=Men's Running Shoes"}>
+                {/* "category": "Men's Running Shoes", */}
                 <Image
                     src={ManRun}
                     alt=""
                     className="object-cover "
                 />
+                </Link>
             </div>
 
             {/* Text Section */}
@@ -37,8 +40,7 @@ const AfterProductc = () => {
               
                 
                 <button className="bg-black text-white rounded-3xl h-[39px] w-[138px] text-sm md:text-base hover:bg-gray-800 transition duration-300">
-                   
-                   <Link href={"/store"}>find your shoes</Link>
+                   <Link href={"/store/all"}>Find your shoes</Link>
                 </button>
                
             </div>

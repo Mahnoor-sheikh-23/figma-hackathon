@@ -9,7 +9,7 @@ import india from "../public/image/india.png";
 
 const Footer = () => {
     return (
-        <div className="flex flex-col bg-black text-white h-auto w-full p-6 lg:h-[431px] justify-between">
+        <div className="flex flex-col mt-9 bg-black text-white h-auto w-full p-6 lg:h-[431px] justify-between">
             {/* Top Section */}
             <div className="flex flex-col lg:flex-row justify-between">
                 {/* Links Section */}

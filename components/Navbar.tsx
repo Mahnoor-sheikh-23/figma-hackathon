@@ -12,7 +12,7 @@ const Navbar = () => {
         </div>
         <div className='flex md:gap-7 justify-evenly p-3 font-medium text-[11px]'>
           <div className='border-r-2 border-black pr-3 '>
-            <Link href={"/store"}>
+            <Link href={"/items/category?category=all"}>
               Find a Store
             </Link></div>
           <div className='border-r-2 border-black pr-3 '>

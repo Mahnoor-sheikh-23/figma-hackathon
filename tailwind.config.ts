@@ -9,6 +9,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      animation: {
+        bounce: "bounce 1s infinite",
+      }, keyframes: {
+        bounce: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-15px)" },
+        },
+      },extend: {
+        animationDelay: {
+          // 200: "200ms",
+          400: "400ms",
+        },
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

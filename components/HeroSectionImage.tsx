@@ -19,11 +19,13 @@ const HeroSectionImage = () => {
 
             {/* Image Section */}
             <div className="w-full">
-                <Image
-                    src={shoeImage}
-                    alt=""
-                    className="w-full object-cover h-[300px] sm:h-[400px] md:h-[550px] lg:h-[550px]"
-                />
+                <Link href='/items/all'>
+                    <Image
+                        src={shoeImage}
+                        alt=""
+                        className="w-full object-cover h-[300px] sm:h-[400px] md:h-[550px] lg:h-[550px]"
+                    />
+                </Link>
             </div>
 
             {/* Text Section */}
