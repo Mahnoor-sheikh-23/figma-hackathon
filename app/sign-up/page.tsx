@@ -37,9 +37,7 @@ const Page = () => {
     } = useForm<CheckoutFormData>({
         resolver: zodResolver(checkOutSchema),
     });
-    if (!submittedData) {
-        return (<p>NO Data sumbitted</p>)
-    }
+   
     const onSubmit = (data: CheckoutFormData) => {
         console.log("Form submitted:", data);
         setSubmittedData(data); // Save submitted data
