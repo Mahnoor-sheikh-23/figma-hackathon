@@ -41,7 +41,6 @@ const Page = () => {
             inventory: products.inventory
         };
         addToCart(productToAdd);
-        console.log("product added ",productToAdd);
     };
 
     useEffect(() => {

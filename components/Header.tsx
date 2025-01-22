@@ -192,7 +192,7 @@ const Header = () => {
 
                 {/* Dropdown Results */}
                 {filteredProducts.length > 0 && (
-                    <div className="absolute top-12 left-0  w-[360px] overflow-y-auto h-[350px] bg-white shadow-lg z-50 rounded-lg">
+                    <div className="absolute top-12 left-0  w-auto overflow-y-auto h-[350px] bg-white shadow-lg z-50 rounded-lg">
                         <div className="py-2">
                             {filteredProducts.map((product, index: number) => (
                                 <div key={index} className="px-4 py-2 hover:bg-gray-100">

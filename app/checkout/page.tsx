@@ -49,13 +49,13 @@ const Checkout = () => {
         addressLine3: '',
         city: '',
         postalCode: '',
-        PAN:""
+        PAN: ""
 
     });
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [success, setSuccess] = useState<string | null>(null);
-    
-    
+
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -67,39 +67,38 @@ const Checkout = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("sumbit");
         setErrors({});
         const validation = checkoutSchema.safeParse(formData);
         if (!validation.success) {
-          const validationErrors: Record<string, string> = {};
-          validation.error.errors.forEach((err) => {
-            if (err.path[0]) validationErrors[err.path[0]] = err.message;
-          });
-          setErrors(validationErrors);
-          return;
-        }
-       
-            // Make API call to submit form data
-            const response = await fetch('http://localhost:3000/api/customers', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+            const validationErrors: Record<string, string> = {};
+            validation.error.errors.forEach((err) => {
+                if (err.path[0]) validationErrors[err.path[0]] = err.message;
             });
+            setErrors(validationErrors);
+            return;
+        }
 
-            const data = await response.json();
-            console.log("sumbit",data);
-            
-            if (response.ok) {
-                setSuccess(data.message);
-            } else {
-                setErrors({ server: data.error });
-                setSuccess(null);
-                console.log("error is here  " , data.server);
-                
-            }
-       
+        // Make API call to submit form data
+        const response = await fetch('http://localhost:3000/api/customers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        });
+
+        const data = await response.json();
+
+
+        if (response.ok) {
+            setSuccess(data.message);
+        } else {
+            setErrors({ server: data.error });
+            setSuccess(null);
+            console.log("error is here  ", data.server);
+
+        }
+
     };
 
     const { cartItems, cartCount, getTotalPrice } = useCart();
@@ -269,7 +268,7 @@ const Checkout = () => {
                                 <div className='space-y-6'>
                                     <div>
                                         <input
-                                          
+
                                             placeholder='PAN'
                                             value={formData.PAN}
                                             onChange={handleChange}
@@ -312,7 +311,7 @@ const Checkout = () => {
                                             type="radio"
                                             // value={formData.isChecked}
                                             onChange={handleChange}
-                                               name="paymentMethod"
+                                            name="paymentMethod"
                                             className="mr-3"
                                             required
                                         />
@@ -327,7 +326,7 @@ const Checkout = () => {
                                             // value={formData.isChecked}
                                             onChange={handleChange}
                                             type="radio"
-                                               name="paymentMethod"
+                                            name="paymentMethod"
                                             className="mr-3"
                                             required
                                         />
@@ -388,7 +387,7 @@ const Checkout = () => {
                                                     <p >{items.productName}</p>
                                                     <p className='mt-2'>Quantity: {items.quantity}</p>
                                                     <p className='mt-2'>Price : ₹ {items.price}</p>
-                                                  
+
                                                 </div>
                                             </div>
                                         </div>

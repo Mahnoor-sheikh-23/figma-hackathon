@@ -53,7 +53,7 @@ const Page = () => {
                         {/* Item 1 */}
                         {cartItems.map((items: Item, index: number) => {
                             return (
-                                <div key={index} className="flex flex-col md:flex-row items-center md:items-start gap-4 border-b pb-4">
+                                <div key={index} className="flex flex-col md:flex-row items-start md:items-start gap-4 border-b pb-4">
                                     <Image
                                         width={100}
                                         height={100}
