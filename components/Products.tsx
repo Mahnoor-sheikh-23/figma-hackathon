@@ -26,11 +26,11 @@ import { urlFor } from '@/sanity/lib/image';
 
 const Products =  () => {
     const [datas , setData] = useState([])
-
     useEffect(()=>{
         const fetchdata = async () =>{
+            const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
             const res = await fetch(
-                `https://shoe-nike-figma-hackathon.netlify.app/api/products?category?category=Men%27s%20Shoes}`,
+                `${apiUrl}/api/products?category?category=Men%27s%20Shoes}`,
                 { cache: "no-store" } 
             );
         

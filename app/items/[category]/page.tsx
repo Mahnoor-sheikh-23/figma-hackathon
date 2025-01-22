@@ -32,7 +32,8 @@ const ItemsPage = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch(`https://shoe-nike-figma-hackathon.netlify.app/api/products?category=${encodeURIComponent(category)}`);
+                const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+                const response = await fetch(`${apiUrl}/api/products?category=${encodeURIComponent(category)}`);
                 console.log(response);
                 if (!response.ok) {
                     throw new Error("Failed to fetch products");
