@@ -40,7 +40,7 @@ const AfterProductc = () => {
               
                 
                 <button className="bg-black text-white rounded-3xl h-[39px] w-[138px] text-sm md:text-base hover:bg-gray-800 transition duration-300">
-                   <Link href={"/store/all"}>Find your shoes</Link>
+                   <Link href={"/items/category?category=all"}>Find your shoes</Link>
                 </button>
                
             </div>

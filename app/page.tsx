@@ -11,7 +11,7 @@ import More from "@/components/More";
 
 export default function Home() {
   return (
-   <>
+   <div className="overflow-hidden">
    <Navbar/>
    <Header/>
    <HeroSectionImage/>
@@ -22,6 +22,6 @@ export default function Home() {
    <Essential/>
    <More/>
    <Footer/>
-   </>
+   </div>
   );
 }

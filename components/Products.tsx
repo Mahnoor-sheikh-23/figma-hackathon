@@ -50,7 +50,7 @@ const Products =  () => {
     } ,[])
     return (
         <div>
-            <div className="flex md:justify-center mb-6 ml-7 md:ml-16 h-[604.36px]  mt-14">
+            <div className="flex md:justify-center mb-6 ml-5 md:ml-16 h-[604.36px]  mt-14">
                 <Carousel opts={{
                     align: "start",
                 }}
@@ -86,7 +86,7 @@ const Products =  () => {
                                         </div>
                                         {/* Details Section */}
                                         <div className="flex">
-                                            <div className="w-[201px] h-[84px] leading-8">
+                                            <div className="w-[201px] h-[89px] leading-8">
                                                 <p className="mt-3 font-medium text-[15px]">
                                                     {items.productName}
                                                 </p>

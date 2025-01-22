@@ -68,7 +68,7 @@ const Page = () => {
                                                 {items.category}
                                             </p>
                                             <p className="text-sm text-gray-500">
-                                                {items.category}
+                                                {items.color}
                                             </p>
                                             <p className='mt-2'>Quantity: {items.quantity}</p>
                                         </div>
