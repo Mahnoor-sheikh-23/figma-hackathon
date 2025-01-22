@@ -27,7 +27,7 @@ type CheckoutFormData = z.infer<typeof checkOutSchema>;
 
 
 
-const page = () => {
+const Page = () => {
     const [submittedData, setSubmittedData] = useState<CheckoutFormData | null>(null);
 
     const {
@@ -37,7 +37,9 @@ const page = () => {
     } = useForm<CheckoutFormData>({
         resolver: zodResolver(checkOutSchema),
     });
-
+    if (!submittedData) {
+        return (<p>NO Data sumbitted</p>)
+    }
     const onSubmit = (data: CheckoutFormData) => {
         console.log("Form submitted:", data);
         setSubmittedData(data); // Save submitted data
@@ -111,7 +113,6 @@ const page = () => {
                             </button>
                         </div>
                     </form>
-
                     {/* Sign up prompt */}
                     <div className='mt-4 text-center text-[#757575]'>
                         <p className='text-sm'>
@@ -128,4 +129,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page

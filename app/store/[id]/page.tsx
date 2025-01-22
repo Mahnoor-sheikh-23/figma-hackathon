@@ -60,7 +60,7 @@ const Page = () => {
 
         fetchProduct();
 
-    }, [id]);
+    }, [id , apiUrl]);
 
     if (!products) {
         return <div className="flex items-center justify-center h-screen">
