@@ -28,7 +28,7 @@ type CheckoutFormData = z.infer<typeof checkOutSchema>;
 
 
 const Page = () => {
-    const [submittedData, setSubmittedData] = useState<CheckoutFormData | null>(null);
+    // const [submittedData, setSubmittedData] = useState<CheckoutFormData | null>(null);
 
     const {
         register,
@@ -40,7 +40,7 @@ const Page = () => {
    
     const onSubmit = (data: CheckoutFormData) => {
         console.log("Form submitted:", data);
-        setSubmittedData(data); // Save submitted data
+       ; // Save submitted data
     };
     return (
         <div>

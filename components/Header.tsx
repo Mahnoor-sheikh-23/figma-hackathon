@@ -54,7 +54,7 @@ const Header = () => {
                 } else {
                     console.error("Failed to fetch products");
                 }
-            } catch (error) {``
+            } catch (error) {
                 console.error("Error fetching products:", error);
             }
         };
