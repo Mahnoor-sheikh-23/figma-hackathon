@@ -30,7 +30,7 @@ const Products =  () => {
     useEffect(()=>{
         const fetchdata = async () =>{
             const res = await fetch(
-                `http://localhost:3000/api/products?category?category=Men%27s%20Shoes}`,
+                `https://shoe-nike-figma-hackathon.netlify.app/api/products?category?category=Men%27s%20Shoes}`,
                 { cache: "no-store" } 
             );
         

@@ -31,7 +31,7 @@ type Item = {
 
 const Gear = async () => {
     const res = await fetch(
-        `http://localhost:3000/api/products`,
+        `https://shoe-nike-figma-hackathon.netlify.app/api/products`,
         { cache: "no-store" } // Avoid caching for fresh data
     );
 

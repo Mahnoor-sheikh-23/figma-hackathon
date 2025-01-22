@@ -33,7 +33,7 @@ const ItemsPage = () => {
         const fetchProducts = async () => {
             try {
                 console.log("Fetching products for category:", category); // Log the category
-                const response = await fetch(`http://localhost:3000/api/products?category=${encodeURIComponent(category)}`);
+                const response = await fetch(`https://shoe-nike-figma-hackathon.netlify.app/api/products?category=${encodeURIComponent(category)}`);
                 console.log(response);
                 if (!response.ok) {
                     throw new Error("Failed to fetch products");
