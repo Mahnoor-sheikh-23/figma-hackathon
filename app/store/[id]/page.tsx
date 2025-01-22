@@ -26,7 +26,7 @@ const Page = () => {
     const { id } = useParams(); // Use useParams to get the dynamic id
     const [products, setProducts] = useState<Item | null>(null); // Ensure proper type handling
     const { addToCart } = useCart();
-    const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+   
 
     const handleAddToCart = () => {
         if (!products) return; // Ensure product is available
@@ -47,7 +47,7 @@ const Page = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`${apiUrl}/api/products/route.ts`);
+                const response = await fetch(`https://shoe-nike-figma-hackathon.netlify.app/api/products/route.ts`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch product');
                 }
@@ -60,7 +60,7 @@ const Page = () => {
 
         fetchProduct();
 
-    }, [id , apiUrl]);
+    }, [id ]);
 
     if (!products) {
         return <div className="flex items-center justify-center h-screen">

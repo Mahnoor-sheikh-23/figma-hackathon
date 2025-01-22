@@ -30,9 +30,9 @@ type Item = {
 
 
 const Gear = async () => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+   
     const res = await fetch(
-        `${apiUrl}/api/products`,
+        `https://shoe-nike-figma-hackathon.netlify.app//api/products`,
         { cache: "no-store" } // Avoid caching for fresh data
     );
 

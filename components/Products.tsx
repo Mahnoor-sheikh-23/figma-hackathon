@@ -28,9 +28,9 @@ const Products =  () => {
     const [datas , setData] = useState([])
     useEffect(()=>{
         const fetchdata = async () =>{
-            const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+          
             const res = await fetch(
-                `${apiUrl}/api/products?category?category=Men%27s%20Shoes}`,
+                `https://shoe-nike-figma-hackathon.netlify.app/api/products?category?category=Men%27s%20Shoes}`,
                 { cache: "no-store" } 
             );
         
