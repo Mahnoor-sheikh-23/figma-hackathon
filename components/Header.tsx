@@ -45,7 +45,7 @@ const Header = () => {
                 return;
             }
             try {
-                const res = await fetch(`https://shoe-nike-figma-hackathon.netlify.app/api/products?search=${searchTerm}`, {
+                const res = await fetch(`https://shoe-nike-figma-hackathon.netlify.app/api/products?search=${encodeURIComponent(searchTerm)}`, {
                     cache: "no-store",
                 })
                 if (res.ok) {
@@ -74,8 +74,8 @@ const Header = () => {
                 <div className="hidden md:flex space-x-8 text-lg font-medium">
                     <ul className="flex space-x-6">
                         <li><Link href="/items/category?category=all">New & Featured</Link></li>
-                        <li><Link href="/items/category?category=Men's%20Shoes">Men</Link></li>
-                        <li><Link href="/items/category?category=Women's%20Shoes">Women</Link></li>
+                        <li><Link href={`/items/category?category=${encodeURIComponent("Men's Shoes")}`}>Men</Link></li>
+                        <li><Link href={`/items/category?category=${encodeURIComponent("Women's Shoes")}`}>Women</Link></li>
                         <li><Link href="/items/kids">Kids</Link></li>
                         <li><Link href="/items/sale">Sale</Link></li>
                         <li><Link href="/items/snkrs">SNKRS</Link></li>
