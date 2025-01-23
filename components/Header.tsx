@@ -47,7 +47,7 @@ const Header = () => {
             try {
                 const res = await fetch(`https://shoe-nike-figma-hackathon.netlify.app/api/products?search=${searchTerm}`, {
                     cache: "no-store",
-                });
+                })
                 if (res.ok) {
                     const { data } = await res.json();
                     setFilteredProducts(data); // Update state with API response
