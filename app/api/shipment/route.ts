@@ -12,11 +12,11 @@ export async function POST(req: NextRequest) {
         );
     }
 
-    
+
     const shipmentRequest = {
         shipments: [
             {
-                service_code: "fedex_ground", 
+                service_code: "fedex_ground",
                 ship_to: to,
                 ship_from: from,
                 packages: [
@@ -56,7 +56,6 @@ export async function POST(req: NextRequest) {
             }
         );
         const shipmentId = shipmentResponse.data.shipments[0]?.shipment_id;
-        console.log("Shipment created:", shipmentId);
 
         if (!shipmentId) {
             return NextResponse.json(
@@ -87,15 +86,16 @@ export async function POST(req: NextRequest) {
             }
         );
 
+
         const rates = ratesResponse.data?.rate_response?.rates;
-        if (!rates || rates.length === 0) {
+        if (!rates || rates.length < 0) {
             return NextResponse.json(
                 { error: "No shipping rates available." },
                 { status: 500 }
             );
         }
-
-        console.log("Rates retrieved successfully:", rates);
+        console.log("rates", rates);
+        
 
         // 3. Generate a shipping label with the shipment object included
         const labelResponse = await axios.post(

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { UserButton, useAuth } from "@clerk/nextjs";
 import {
     Sheet,
     SheetContent,
@@ -31,12 +32,13 @@ type Product = {
 
 const Header = () => {
     const { cartCount } = useCart();
+
+    const { isSignedIn } = useAuth();
     const { wishlistCount } = useWishlist()
 
     // State to manage search input and search results
     const [searchTerm, setSearchTerm] = useState<string>(""); // Search term from user input
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]); // Filtered products from API
-
     // Fetch and filter products based on search term
     useEffect(() => {
         const fetchProducts = async () => {
@@ -54,7 +56,7 @@ const Header = () => {
                 } else {
                     console.error("Failed to fetch products");
                 }
-            } catch (error){
+            } catch (error) {
                 console.error("Error fetching products:", error);
             }
         };
@@ -124,10 +126,20 @@ const Header = () => {
                             </div>
                         )}
                     </div>
-                    <Link href={"/wishlist"}>
+                    <div>
+                        {isSignedIn ? (
+                            <UserButton /> // Shows user options if signed in
+                        ) : (
+                            <span className="fa-stack font-bold">
+                                <i className="fas fa-user fa-stack-1x"></i>
+                                <i className="fas fa-ban fa-stack-2x text-danger"></i>
+                            </span>
 
+                        )}
+                    </div>
+                    <Link href={"/wishlist"}>
                         <Image src={heart} alt="Wishlist Icon" className="h-9 w-9" />
-                        <span className="absolute top-[64px] right-[98px] md:right-[74px] bg-gray-600 text-white text-xs rounded-full px-1">
+                        <span className="absolute top-[68px] right-[98px] md:right-[74px] bg-gray-600 text-white text-xs rounded-full px-1">
                             {wishlistCount}
                         </span>
                     </Link>

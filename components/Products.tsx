@@ -30,7 +30,7 @@ const Products =  () => {
         const fetchdata = async () =>{
           
             const res = await fetch(
-                `https://shoe-nike-figma-hackathon.netlify.app/api/products?category?category=Men%27s%20Shoes}`,
+                `https://shoe-nike-figma-hackathon.netlify.app/api/products?category?category=Men%27s%20Shoes`,
                 { cache: "no-store" } 
             );
         
@@ -86,7 +86,7 @@ const Products =  () => {
                                         </div>
                                         {/* Details Section */}
                                         <div className="flex">
-                                            <div className="w-[201px] h-[89px] leading-8">
+                                            <div className="w-[201px] h-[99px] leading-7">
                                                 <p className="mt-3 font-medium text-[15px]">
                                                     {items.productName}
                                                 </p>

@@ -29,10 +29,9 @@ type Item = {
 };
 
 
-const Gear = async () => {
-   
+const Gera = async () => {
     const res = await fetch(
-        `https://shoe-nike-figma-hackathon.netlify.app//api/products`,
+        `https://shoe-nike-figma-hackathon.netlify.app/api/products`,
         { cache: "no-store" } // Avoid caching for fresh data
     );
 
@@ -69,7 +68,7 @@ const Gear = async () => {
                         {data.map((items: Item) => (
                             <CarouselItem
                                 key={items._id}
-                                className="md:basis-1/3 md:mr-6 lg:mr-0 lg:basis-[25%] flex-shrink-0 w-[300px] p-4"
+                                className="md:basis-1/3 flex justify-center md:mr-6 lg:mr-0 lg:basis-[25%] flex-shrink-0 w-[300px] p-4"
                             >
                                 <div className="md:w-[1308px] md:h-[380px] flex mt-10 custom:gap-9 h-auto w-auto">
                                     <div className="w-[270px] h-[350px]">
@@ -86,7 +85,7 @@ const Gear = async () => {
                                         </div>
                                         {/* Details Section */}
                                         <div className="flex">
-                                            <div className="w-[201px] h-[89px] leading-8">
+                                            <div className="w-[201px] h-[99px] leading-7">
                                                 <p className="mt-3 font-medium text-[15px]">
                                                     {items.productName}
                                                 </p>
@@ -97,6 +96,12 @@ const Gear = async () => {
                                                     {items.category}
                                                 </Link>
                                                 <br />
+                                                <Link
+                                                    className="text-[#757575] font-medium text-[15px]"
+                                                    href={`/store/${items._id}`}
+                                                >
+                                                    {`Colors Avaiable : ${items.color}`}
+                                                </Link>
                                                 <Link
                                                     className="text-[#757575] font-medium text-[15px]"
                                                     href={`/store/${items._id}`}
@@ -122,5 +127,5 @@ const Gear = async () => {
     )
 }
 
-export default Gear
+export default Gera
 

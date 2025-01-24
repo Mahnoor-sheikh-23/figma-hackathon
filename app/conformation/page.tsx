@@ -1,125 +1,223 @@
-import React from "react";
+"use client";
+import { useCart } from "@/components/CartContext";
+import client from "@/sanityClient";
+import React, { useEffect, useState } from "react";
+import { urlFor } from "@/sanity/lib/image";
+import Image from "next/image";
+import Link from "next/link";
+type Item = {
+  _id: string;
+  image: string;
+  productName: string;
+  category: string;
+  color: number;
+  price: number;
+  description: string;
+  inventory: number;
+  quantity: number
+};
+
+interface ShippingRate {
+  carrierFriendlyName: string;
+  carrierDeliveryDays: number;
+  shippingAmount: {
+    currency: string;
+    amount: number;
+  };
+}
+
+interface ShippingData {
+  labelUrl: string;
+  trackingNumber: string;
+  shippingRates: ShippingRate[];
+}
+
+interface Order {
+  _id: string;
+  customerName: string;
+  customerEmail: string;
+  customerContact: string;
+  shippingData: ShippingData;
+  shippingRate: string;
+  orderStatus: string;
+  createdAt: string;
+  shippingAddress: string;
+}
 
 const OrderConfirmation: React.FC = () => {
+  const [order, setOrder] = useState<Order | null>(null);
+  const { cartItems, getTotalPrice, cartCount } = useCart()
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      const query = `
+        *[_type == "order"] | order(createdAt desc)[0] {
+          _id,
+          customerName,
+          customerEmail,
+          customerContact,
+          shippingData {
+            labelUrl,
+            trackingNumber,
+            shippingRates[] {
+              carrierFriendlyName,
+              carrierDeliveryDays,
+              shippingAmount {
+                currency,
+                amount
+              }
+            }
+          },
+          shippingRate,
+          orderStatus,
+          createdAt,
+          shippingAddress, // Assuming this field contains the user's address
+        }
+      `;
+      const data = await client.fetch(query);
+      setOrder(data);
+    };
+
+    fetchOrder();
+  }, []);
+
+  if (!order) return <div>Loading...</div>;
+
+
   return (
     <div className="max-w-7xl mx-auto p-6">
-      {/* Title */}
-      <h1 className="text-3xl font-bold text-center mb-8">Thank you for your order</h1>
+      <h1 className="text-3xl font-bold text-center mb-8">Thank you for your order!</h1>
 
-      {/* Order Details Section */}
-      <div className="flex justify-between items-center border-b pb-4 mb-6">
-        <div>
-          <p className="text-sm font-semibold">Order Number: <span className="font-normal">V4013421451</span></p>
-          <p className="text-sm font-semibold">Order Date: <span className="font-normal">Tue Jul 27 2021</span></p>
-          <p className="text-sm font-semibold">Customer: <span className="font-normal">John Newman</span></p>
-        </div>
-        <button className="bg-black flex  gap-2 text-white py-2 px-4 rounded hover:bg-gray-800"> <i className="fa-solid fa-print mt-1"></i>PRINT</button>
+      {/* Order Details */}
+      <div className="border-b pb-4 mb-6">
+        <p className="text-sm font-semibold">
+          <strong>Order Number:</strong> {order._id}
+        </p>
+        <p className="text-sm font-semibold">
+          <strong>Order Date:</strong> {new Date(order.createdAt).toLocaleDateString('en-US', {
+            weekday: 'long', // "Monday"
+            year: 'numeric', // "2025"
+            month: 'long', // "January"
+            day: 'numeric', // "23"
+          }) || "Invalid Date"}
+        </p>
+        <p className="text-sm font-semibold">
+          <strong>Customer Name:</strong> {order.customerName}
+        </p>
+        <p className="text-sm font-semibold">
+          <strong>Email:</strong> {order.customerEmail}
+        </p>
+        <p className="text-sm font-semibold">
+          <strong>Contact:</strong> {order.customerContact}
+        </p>
+        <button
+          onClick={() => window.print()}
+          className="mt-3 bg-black flex items-center gap-2 text-white py-2 px-4 rounded hover:bg-gray-800"
+        >
+          <i className="fa-solid fa-print"></i> Print Order
+        </button>
+
       </div>
 
-      {/* Shipping, Billing, and Payment Info */}
-      <div className="grid md:grid-cols-2 gap-8 mb-8">
-        <div>
-          <h3 className="font-semibold text-lg mb-2">Shipping Address</h3>
-          <p>John Newman</p>
-          <p>2125 Chestnut St</p>
-          <p>SAN FRANCISCO, CA 94123-2708 US</p>
-          <p>6305305555</p>
-          <p>John.Newman.Baymard2021@gmail.com</p>
-
-          <h3 className="font-semibold text-lg mt-6 mb-2">Billing Address</h3>
-          <p>John Newman</p>
-          <p>2125 Chestnut St</p>
-          <p>SAN FRANCISCO, CA 94123-2708 US</p>
-        </div>
-        <div>
-          <h3 className="font-semibold text-lg mb-2">Payment Method</h3>
-          <p>Mastercard ************2418</p>
-          <p>Exp: 03/2026</p>
-
-          <h3 className="font-semibold text-lg mt-6 mb-2">Shipping Method</h3>
-          <p>5-6 Business Days</p>
-        </div>
+      {/* Shipping Info */}
+      <div className="border-b pb-4 mb-6">
+        <h3 className="font-semibold text-lg mb-2">Shipping Information</h3>
+        <p>
+          <strong>Shipping Method:</strong> {order.shippingRate || "N/A"}
+        </p>
+        <p>
+          <strong>Tracking Number:</strong>{" "}
+          {order.shippingData?.trackingNumber || "N/A"}
+        </p>
+        <p>
+          <strong>Label:</strong>{" "}
+          {order.shippingData?.labelUrl ? (
+            <Link
+              href={order.shippingData.labelUrl}
+              target="_blank"
+              className="text-blue-500 underline"
+            >
+              View Shipping Label
+            </Link>
+          ) : (
+            "N/A"
+          )}
+        </p>
+        {order.shippingData?.shippingRates?.[0] && (
+          <p>
+            <strong>Estimated Delivery:</strong>{" "}
+            {order.shippingData.shippingRates[0].carrierDeliveryDays} days
+          </p>
+        )}
       </div>
 
-      {/* Order Summary */}
-      <div className="border-t pt-6 mb-8">
-        <h3 className="font-semibold text-lg mb-4">Order Summary</h3>
-        <p className="text-sm"><strong>Subtotal:</strong> $10.00</p>
-        <p className="text-sm"><strong>Shipping:</strong> $7.99</p>
-        <p className="text-sm"><strong>Discounts:</strong> $0.00</p>
-        <p className="text-sm"><strong>Order Total:</strong> $18.86</p>
-        <p className="text-sm text-gray-600">Tax calculated in Checkout</p>
+      {/* From and To Address */}
+      <div className="border-b pb-4 mb-6">
+        <h3 className="font-semibold text-lg mb-2">Shipping Details</h3>
+        <p>
+          <strong>From (Company):</strong> Nike Shoes
+        </p>
+        <p>
+          <strong>To (Shipping Address):</strong> {order.customerName || "N/A"}
+        </p>
+      </div>
 
-        <h4 className="font-semibold mt-4">Items Ordered</h4>
-        <div className="flex items-center gap-4 mt-2">
-          <img src="/jason-markk-mini.jpg" alt="Jason Mark Mini Starter Kit" className="w-16 h-16 object-cover" />
+      {/* Order Status */}
+      <div className="border-b pb-4 mb-6">
+        <h3 className="font-semibold text-lg mb-2">Order Status</h3>
+        <p>{order.orderStatus}</p>
+      </div>
+
+      {/* Summary */}
+      <div>
+        {order.shippingData?.shippingRates?.[0]?.shippingAmount ? (
           <div>
-            <p className="text-sm font-medium">Jason Markk Mini Starter Kit</p>
-            <p className="text-sm text-gray-600">SKU: 004210</p>
-            <p className="text-sm text-gray-600">Size undefined QTY 1</p>
-          </div>
-        </div>
-        <p className="text-sm text-gray-600 mt-2">Arrives in 5-6 business days</p>
-      </div>
-
-      {/* Register Section */}
-      <div className="border-t pt-6 mb-8">
-        <h3 className="font-semibold text-lg mb-2">Register</h3>
-        <p className="text-sm text-gray-600 mb-2">FASTER CHECKOUT EVERY TIME</p>
-        <ul className="list-disc pl-4 text-sm text-gray-600">
-          <li>Create Account or Sign In</li>
-          <li>Save your info</li>
-          <li>Checkout faster and enjoy special offers!</li>
-        </ul>
-      </div>
-
-      {/* Sign Up Section */}
-      <div className="border-t pt-6">
-        <h3 className="font-semibold text-lg mb-4">Sign Up For Updates!</h3>
-        <form className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium">Email*</label>
-            <input
-              type="email"
-              id="email"
-              className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your email"
-            />
-          </div>
-          <div>
-            <label htmlFor="dob" className="block text-sm font-medium">Date of Birth (MM/DD/YYYY)*</label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="MM"
-                maxLength={2}
-                className="w-12 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <input
-                type="text"
-                placeholder="DD"
-                maxLength={2}
-                className="w-12 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <input
-                type="text"
-                placeholder="YYYY"
-                maxLength={4}
-                className="w-16 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+            <p className='text-[21px] font-medium'>Order Summary</p>
+            <div className="flex justify-between mt-6 text-sm">
+              <p>Subtotal</p>
+              <p>₹{getTotalPrice()}</p>
             </div>
+            <div className="flex justify-between text-sm mt-2">
+              <p>Estimated Delivery & Handling</p>
+              <p> {order.shippingData.shippingRates[0].shippingAmount.amount}</p>
+            </div>
+
+            {/* Total */}
+            <div className="flex justify-between mt-6 text-lg border-t-2 border-b-2 border-gray-300 py-3 font-medium">
+              <p>Total</p>
+              <p>₹ {getTotalPrice() + order.shippingData.shippingRates[0].shippingAmount.amount}</p>
+            </div>
+            <p className='text-[10px] mt-5'>(The total reflects the price of your order, including all duties and taxes)</p>
+
+
           </div>
-          <button
-            type="submit"
-            className="w-full bg-black text-white py-2 px-4 rounded hover:bg-gray-800"
-          >
-            Sign Up
-          </button>
-        </form>
-        <div className="flex justify-between items-center mt-4">
-          <a href="#" className="text-sm text-blue-500 hover:underline">Privacy Statement</a>
-          <a href="#" className="text-sm text-blue-500 hover:underline">Terms Of Use</a>
-        </div>
+        ) : (
+          <p>Total Cost: N/A</p>
+        )}
+
+        {cartCount > 0 ? (
+          cartItems.map((items: Item, inndex: number) => {
+            return (
+              <div key={inndex} className=' md:w-[330px] w-auto  mt-3 md:ml-10 flex md:flex flex-col'>
+                <div>
+                  <div className='space-y-4 '>
+                    <div className="flex" >
+                      <Image src={urlFor(items.image).url()} alt='' width={100} height={100} className='w-32 h-32 md:w-[100px] md:h-[100px]  ' />
+                      <div className='flex flex-col  p-2'>
+                        <p >{items.productName}</p>
+                        <p className='mt-2'>Quantity: {items.quantity}</p>
+                        <p className='mt-2'>Price : ₹ {items.price}</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            )
+          })
+        ) : <p className='text-3xl'>Your Cart Is Currently Empty</p>
+        }
       </div>
     </div>
   );

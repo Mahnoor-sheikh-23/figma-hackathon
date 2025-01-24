@@ -5,8 +5,8 @@ import Image from 'next/image';
 import nike from "../../public/image/nikeSign.png";
 import bag from "../../public/image/bag.png";
 import msg from "../../public/shoe-images/msgs.png";
-import Footer from '@/components/Footer';
 import { useCart } from '@/components/CartContext';
+import Footer from '@/components/Footer';
 import { urlFor } from '@/sanity/lib/image';
 import { z } from 'zod';
 type Item = {
@@ -20,11 +20,29 @@ type Item = {
     inventory: number;
     quantity: number
 };
+
+interface ShippingAmount {
+    currency: string;
+    amount: number;
+}
+
+interface ShippingRate {
+    carrier_code: string;
+    carrier_delivery_days: number;
+    carrier_friendly_name: string;
+    carrier_id: string;
+    service_code: string;
+    ship_date: string;
+    zone: string;
+    shipping_amount: ShippingAmount;
+}
+
+
 // Define the form data schema using Zod
 const checkoutSchema = z.object({
     firstName: z.string().min(3, "First name is required"),
     lastName: z.string().min(3, "Last name is required"),
-    contact: z.string().min(10, "Contact number should be 10 digits").max(10, "Contact number should be 10 digits"),
+    contact: z.string().min(11, "Contact number should be 10 digits").max(11, "Contact number should be 10 digits"),
     email: z.string().email("Invalid email address"),
     PAN: z.string().optional(),
     addressLine1: z.string().min(1, "Address Line 1 is required"),
@@ -50,12 +68,10 @@ const Checkout = () => {
         city: '',
         postalCode: '',
         PAN: ""
-
     });
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [success, setSuccess] = useState<string | null>(null);
-
-
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -76,10 +92,10 @@ const Checkout = () => {
             });
             setErrors(validationErrors);
             return;
-        }
-
+        };
+        setLoading(true);
         // Make API call to submit form data
-        const response = await fetch('http://localhost:3000/api/customers', {
+        const response = await fetch('https://shoe-nike-figma-hackathon.netlify.app/api/customers', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -87,18 +103,117 @@ const Checkout = () => {
             body: JSON.stringify(formData),
         });
 
-        const data = await response.json();
-
-
         if (response.ok) {
-            setSuccess(data.message);
+            setSuccess("Data Sucessfully Added ")
         } else {
-            setErrors({ server: data.error });
-            setSuccess(null);
-            console.log("error is here  ", data.server);
-
+            setErrors({
+                error: "Something wrong Here"
+            })
         }
 
+        // form data 
+        if (formData) {
+            const shippingData = {
+                from: {
+                    "name": "John Doe",
+                    "email": "companytesting@gmail.com",
+                    "phone": "111-111-1111",
+                    "company_name": "Example Corp.",
+                    "address_line1": "4009 Marathon Blvd",
+                    "address_line2": "Suite 300",
+                    "city_locality": "Austin",
+                    "state_province": "TX",
+                    "postal_code": "78756",
+                    "country_code": "US",
+                    "address_residential_indicator": "no"
+                },
+                to: {
+                    name: `${formData.firstName} ${formData.lastName}`,
+                    address_line1: `${formData.addressLine1} ${formData.addressLine2} ${formData.addressLine3}`,
+                    city_locality: formData.city,
+                    postal_code: formData.postalCode,
+                    state_province: "CA",
+                    country_code: "US",
+                    phone: formData.contact,
+                    email: formData.email
+                },
+                weight: 100, // Example weight (grams)
+                dimensions: { length: 10, width: 5, height: 5 }, // Example dimensions (cm)
+            };
+
+            try {
+                console.log("Sending shipping data: ", shippingData);
+
+                const response = await fetch("https://shoe-nike-figma-hackathon.netlify.app/api/shipment", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(shippingData),
+                });
+                if (response.ok) {
+                    const rates = await response.json();
+                    if (rates.shippingRates && rates.shippingRates.length > 0) {
+                        const firstRate = rates.shippingRates[0];
+                        const enrichedShippingData = {
+                            ...shippingData,
+                            shippingRates: rates.shippingRates.map((rate: ShippingRate) => ({
+                                carrierCode: rate.carrier_code,
+                                carrierDeliveryDays: rate.carrier_delivery_days,
+                                carrierFriendlyName: rate.carrier_friendly_name,
+                                carrierId: rate.carrier_id,
+                                serviceCode: rate.service_code,
+                                shipDate: rate.ship_date,
+                                zone: rate.zone,
+                                shippingAmount: {
+                                    currency: rate.shipping_amount.currency,
+                                    amount: rate.shipping_amount.amount,
+                                },
+                            })),
+                            labelUrl: rates.labelUrl,
+                            trackingNumber: rates.trackingNumber,
+                        };
+
+                        const shippingRate = firstRate.shipping_amount.amount;
+
+                        console.log("Final shipping data: ", enrichedShippingData);
+                        console.log("Shipping rate: ", shippingRate);
+
+                        // Send enriched shipping data and rate to your /api/orders route
+                        const responsees = await fetch('https://shoe-nike-figma-hackathon.netlify.app/api/orders', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                shippingData: enrichedShippingData,
+                                shippingRate,
+                                customerName: `${formData.firstName} ${formData.lastName}`,
+                                customerEmail: formData.email,
+                                customerContact: formData.contact,
+                                orderStatus: 'completed',
+                            }),
+                        });
+
+                        if (responsees.ok) {
+                            alert("Your order has been confirmed!");
+                            window.location.href = "/conformation";
+                        } else {
+                            alert("Failed to save order.");
+                        }
+                    } else {
+                        console.error("No shipping rates available.");
+                    }
+                } else {
+                    console.error("Error fetching shipping rates");
+                }
+            } catch (error) {
+                console.error("Error during the shipping or order process:", error);
+            }
+        } else {
+            console.log("Please complete the form before submitting.");
+        }
+        setLoading(false);
     };
 
     const { cartItems, cartCount, getTotalPrice } = useCart();
@@ -189,7 +304,6 @@ const Checkout = () => {
                                         className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
                                     />
                                 </div>
-
                                 <div className="flex space-x-6">
                                     <div className="mb-4">
                                         <input
@@ -259,6 +373,8 @@ const Checkout = () => {
                                                 className='w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black'
                                             />
                                         </div>
+                                        {errors.contact && <p className="text-red-600 mt-3">{errors.contact}</p>}
+
                                         <p>A carier might contact to you confrom delivery</p>
                                     </div>
 
@@ -351,6 +467,12 @@ const Checkout = () => {
                                 </div>
                             </div>
                         </form>
+
+                        {loading && (
+                            <div className="loading-spinner fixed top-[50%] left-[50%] font-semibold transform-[50%]">
+                                <span>Loading...</span> {/* You can replace this with a spinner component */}
+                            </div>
+                        )}
                     </div>
                 </section>
 
