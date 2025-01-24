@@ -107,7 +107,7 @@ export default defineType({
     {
       name: "shippingRate",
       title: "Shipping Rate",
-      type: "string",
+      type: "number",
     },
     {
       name: "orderStatus",
